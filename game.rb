@@ -8,6 +8,7 @@ class Game
     while !end?
       turn
     end
+    end_message
   end
 
   private
@@ -46,6 +47,13 @@ class Game
 
     def end?
       @p1.life == 0 || @p2.life == 0
+    end
+
+    def end_message
+      puts "\n\t\tTHE END\n"
+      puts "PLAYERS SCORES:"
+      puts "#{@p1.name}: #{@p1.points} points"
+      puts "#{@p2.name}: #{@p2.points} points"
     end
 
     def get_sign
