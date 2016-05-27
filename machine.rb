@@ -21,8 +21,10 @@ end
 
 class Game
   def initialize
-    @turn = 0
+    @turn_num = 0
     stage
+    @p1 = Player.new
+    @p2 = Player.new
   end
 
   private
@@ -48,7 +50,6 @@ class Game
         "Sorry?"
         stage
       end
-
     end
 
     def end?
@@ -72,11 +73,26 @@ class Game
       end
     end
 
+    def format_answer
+      answ = get_input
+      answ.to_i
+    end
+
+    def which_player
+      case @turn_num % 2
+      when 0 
+        return @p1
+      when 1
+        return @p2
+      end
+    end
+
     def turn
       num1 = rand(@difficult)
       num2 = rand(@difficult)
       sign = get_sing
       result = eval(num1, num2, sign)
+      puts ""
     end
 
 end
