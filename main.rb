@@ -1,3 +1,4 @@
-require_relative 'machine'
+require_relative 'Player'
+require_relative 'Game'
 
 game = Game.new
