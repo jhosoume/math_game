@@ -1,17 +1,19 @@
 class Player
   attr_accessor :life, :points, :name, :player_id
-  @@playnum = 1
+  @@players = []
+
   def initialize
     @life = 3
     @points = 0
-    @name = ""
+    @player_id = @@players.length
+    @@players << self
     get_name
-    player_number
   end
+
 
   private
     def get_name
-      puts "What's your name?"
+      puts "what's your name?"
       loop do
         print "> "
         input = gets.chomp
@@ -20,8 +22,11 @@ class Player
       end
     end
 
-    def player_number
-      @player_id = @@playnum
-      @@playnum += 1
+    def self.players
+      @@players
+    end
+
+    def self.find_player(name)
     end
 end
+
