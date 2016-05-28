@@ -4,7 +4,10 @@ require_relative 'game'
 class Machine
   def initialize
     init_message
-
+    loop do
+      Game.new
+      break if !restart?
+    end
   end
 
   private
@@ -24,7 +27,7 @@ class Machine
     end
 
     def restart?
-      puts "Want to restart? [Y/N]"
+      puts "Want to restart the game? [Y/N]"
       case get_input
       when "Y"
         true

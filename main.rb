@@ -1,4 +1,3 @@
-require_relative 'Player'
-require_relative 'Game'
+require_relative 'machine'
 
-game = Game.new
+Machine.new

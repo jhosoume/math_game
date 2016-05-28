@@ -1,17 +1,34 @@
+require 'colorize'
+
 class Game
   def initialize
     starting_message
     @turn_num = 0
+    @players = []
     stage
-    @p1 = Player.new
-    @p2 = Player.new
-    while !end?
+    create_players
+    while !over? do 
       turn
-    end
+    end 
     end_message
   end
 
   private
+    def create_players
+      get_nplayers.times { @players << Player.new }
+    end
+
+    def get_nplayers
+      puts "How many players are going to join?"
+      nplayers = get_input.to_i
+      if nplayers <= 0  
+        puts 'Ohh no! We do not have enough players! :('
+        get_nplayers
+      else
+        nplayers
+      end
+    end
+
     def starting_message
       puts "Game started!"
       puts 'Type "quit" anytime to exit the game.'
@@ -28,7 +45,7 @@ class Game
     end
 
     def stage
-      puts "How hard is the gaming going to be? [easy, medium, hard]"
+      print "How hard is the gaming going to be? ", "[", "easy".blue, ", ", "medium".yellow, ", ", "hard".red, "]\n"
       stg = get_input
       case stg
       when "easy"
@@ -40,24 +57,23 @@ class Game
       when "quit"
         exit!
       else
-        "Sorry?"
+        puts "Sorry?"
         stage
       end
     end
 
-    def end?
-      @p1.life == 0 || @p2.life == 0
+    def over?
+      @players.any? { |player| player.life <= 0 }
     end
 
     def end_message
-      puts "\n\t\tTHE END\n"
+      puts "\n\t\tGAME OVER\n".red
       puts "PLAYERS SCORES:"
-      puts "#{@p1.name}: #{@p1.points} points"
-      puts "#{@p2.name}: #{@p2.points} points"
+      @players.each { |player| puts "#{player.name}: #{player.points} points" }
     end
 
     def get_sign
-      sign = ['plus', 'minus', 'multiplied', 'divided'].sample
+      ['plus', 'minus', 'multiplied', 'divided'].sample
     end
 
     def eval(num1, num2, sign)
@@ -80,12 +96,7 @@ class Game
 
     def which_player
       # Improve to accept more players
-      case @turn_num % 2
-      when 0 
-        return @p1
-      when 1
-        return @p2
-      end
+      @players[@turn_num % @players.count]
     end
 
     def turn
@@ -94,14 +105,14 @@ class Game
       num2 = rand(@difficult)
       sign = get_sign
       result = eval(num1, num2, sign)
-      puts "#{player.name}: What does #{num1} #{sign} #{num2} equal?"
+      puts "#{player.name}: What does #{num1} #{sign} #{num2} equal?".blue
       answ = get_answer 
       if result == answ
-        puts "That's correct!"
+        puts "That's correct!".green
         player.points += 1
         puts "One more point! You, #{player.name}, now have #{player.points} points"
       else
-        puts "Oh no! That's incorrect!"
+        puts "Oh no! That's incorrect!".yellow
         player.life -= 1
         puts "You know have #{player.life} life(s)"
       end
